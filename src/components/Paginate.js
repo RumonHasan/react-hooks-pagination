@@ -1,4 +1,4 @@
-import React, {useContext, useState} from "react";
+import React, {useContext, useState, useEffect} from "react";
 import { PageContext } from "../App";
 
 const Paginate = ()=>{
@@ -13,14 +13,27 @@ const Paginate = ()=>{
     }
 
     // starting page range
-    const pageLimit = 5;
+    const [pageLimit, setPageLimit] = useState(5);
+    const [limitControl, setLimitControl] = useState(5);
     const [minPageRange, setMinPageRange] = useState(0); // first page of the range 
     const [maxPageRange, setMaxPageRange] = useState(5); // max page of the range
 
     // generates the page numbers of per section
     for(let index= 1; index < Math.ceil(posts.length/ postsPerPage); index++){
         pageRange.push(index);
-    }
+    };
+    
+    // limit controller 
+    useEffect(()=>{
+        if(limitControl === NaN){
+            setPageLimit(5);
+            setMaxPageRange(5);
+        }else{
+            setPageLimit(parseFloat(limitControl));
+            setMaxPageRange(parseFloat(limitControl));
+        }
+    },[limitControl]);
+    
 
     // display page numbers with a definite range
     const displayPageRange = pageRange.map((singlePageNumber, index)=>{
@@ -72,6 +85,7 @@ const Paginate = ()=>{
 
     return (
         <div style={{display:'flex'}}>
+            <input placeholder="Enter number of pages to display" value={limitControl} onChange={(e)=>setLimitControl(e.target.value)}/>
             <button onClick={handleRangeJump} style={{cursor:'pointer', marginRight:'5px'}}>Next Range</button>
             <button onClick={handleNextPage} style={{cursor:'pointer'}}>Next</button>
             {displayPageRange}
