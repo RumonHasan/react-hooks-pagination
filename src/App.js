@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, {useEffect, useState, createContext} from 'react';
 import Post from './components/Post';
 import Paginate from './components/Paginate';
+import './style.css';
 
 const URL = 'https://jsonplaceholder.typicode.com/todos';
 
@@ -33,20 +34,19 @@ const App = () => {
 
     // basic paginate function
     const paginateFunc = (pageNumber)=>{
-        console.log(pageNumber);
+        setCurrentPageIndex(pageNumber);
     }
-
 
   return (
     <div>
         <PageContext.Provider value={{
             postsPerPage, currentPageIndex,
-            paginatedPosts, posts, paginateFunc
+            paginatedPosts, posts, paginateFunc, setCurrentPageIndex
         }}>
             {paginatedPosts.map((singlePost, index)=>{
                 return (
                     <ul key={index}>
-                        <Post postTitle={singlePost.title} pageNumber={index}/>
+                        <Post postTitle={singlePost.title}/>
                     </ul>
                 )
             })}

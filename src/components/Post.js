@@ -1,9 +1,9 @@
 import React from 'react';
 
 const Post = (props) => {
-  const {postTitle,pageNumber} = props;
+  const {postTitle} = props;
   return (
-    <div>{pageNumber}: {postTitle}</div>
+    <div>{postTitle}</div>
   )
 };
 
