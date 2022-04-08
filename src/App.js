@@ -1,25 +1,59 @@
-import logo from './logo.svg';
-import './App.css';
+import axios from 'axios';
+import React, {useEffect, useState, createContext} from 'react';
+import Post from './components/Post';
+import Paginate from './components/Paginate';
 
-function App() {
+const URL = 'https://jsonplaceholder.typicode.com/todos';
+
+export const PageContext = createContext();
+
+const App = () => {
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  // posts and pagination 
+  const [postsPerPage, setPostsPerPage] = useState(15);
+  const [currentPageIndex, setCurrentPageIndex] = useState(1);
+  
+  // fetching the data
+    useEffect(()=>{
+        setLoading(true);
+        const getPosts = async ()=>{
+            const {data} = await axios.get(URL);
+            setPosts(data);
+            setLoading(false)
+        }
+        getPosts();
+    },[]);
+
+    // number of posts
+    const lastPageIndex = postsPerPage * currentPageIndex; // gets the last index 
+    const firstPageIndex = lastPageIndex - postsPerPage;
+    const paginatedPosts = posts.slice(firstPageIndex, lastPageIndex);
+
+    // basic paginate function
+    const paginateFunc = (pageNumber)=>{
+        console.log(pageNumber);
+    }
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+        <PageContext.Provider value={{
+            postsPerPage, currentPageIndex,
+            paginatedPosts, posts, paginateFunc
+        }}>
+            {paginatedPosts.map((singlePost, index)=>{
+                return (
+                    <ul key={index}>
+                        <Post postTitle={singlePost.title} pageNumber={index}/>
+                    </ul>
+                )
+            })}
+            <Paginate/>
+        </PageContext.Provider>
     </div>
-  );
-}
+  )
+};
 
 export default App;
