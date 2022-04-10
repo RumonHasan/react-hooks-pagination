@@ -58,7 +58,6 @@ const Paginate = ()=>{
     }
     const handlePrevPage = ()=>{
         setCurrentPageIndex((prevPage)=> prevPage - 1);
-
         // egde case when current page is last index of prev last page 
         if((currentPageIndex - 1) % pageLimit === 0){
             setMaxPageRange((prevMax)=> prevMax - pageLimit);
@@ -68,17 +67,13 @@ const Paginate = ()=>{
 
     // jumping entire page range
     const handleRangeJump = ()=>{
-        let differenceRange;
-        differenceRange = maxPageRange - currentPageIndex;
-        setCurrentPageIndex((prevCurrentPage)=> prevCurrentPage + (differenceRange + 1));
+        setCurrentPageIndex((prevCurrentPage)=> prevCurrentPage + ((maxPageRange - currentPageIndex) + 1));
         setMaxPageRange((prevMaxRange)=> prevMaxRange + pageLimit);
         setMinPageRange((prevMinRange)=> prevMinRange + pageLimit);
     }
     // jump back entire page range
     const handlePrevRange = ()=>{
-        let differenceRange;
-        differenceRange = currentPageIndex - minPageRange;
-        setCurrentPageIndex((prevCurrentPage)=> prevCurrentPage - differenceRange);
+        setCurrentPageIndex((prevCurrentPage)=> prevCurrentPage - (currentPageIndex - minPageRange));
         setMaxPageRange((maxPageRange)=> maxPageRange - pageLimit);
         setMinPageRange((minPageRange)=> minPageRange - pageLimit);
     }
